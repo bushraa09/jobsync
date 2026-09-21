@@ -866,7 +866,7 @@ function ResumeContainer({
                 <p className="text-sm font-medium flex items-center gap-2">
                   {isStructuring ? (
                     <>
-                      <Loader className="h-4 w-4 text-blue-500 animate-spin" />
+                      <Loader className="h-4 w-4 text-primary animate-spin" />
                       Structuring your document… you can review and accept items
                       once it finishes.
                     </>

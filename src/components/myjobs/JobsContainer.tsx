@@ -330,7 +330,7 @@ function JobsContainer({
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `jobsync-${format(new Date(), "yyyy-MM-dd")}.csv`;
+      link.download = `careertrack-${format(new Date(), "yyyy-MM-dd")}.csv`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -471,7 +471,7 @@ function JobsContainer({
           {jobs.length < totalJobs && (
             <div ref={sentinelRef} className="flex justify-center p-4">
               {loadingMore && (
-                <Loader className="h-5 w-5 animate-spin text-blue-500" />
+                <Loader className="h-5 w-5 animate-spin text-primary" />
               )}
             </div>
           )}

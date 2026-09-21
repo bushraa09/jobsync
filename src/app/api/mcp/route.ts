@@ -33,11 +33,11 @@ async function handler(req: Request): Promise<Response> {
 
   const { userId, tokenName } = auth;
 
-  const server = new McpServer({ name: "jobsync", version: "1.0.0" });
+  const server = new McpServer({ name: "careertrack", version: "1.0.0" });
 
   server.tool(
     "add_job",
-    "Add a job application to JobSync. Resolves or creates company, job title, location, and source by name. Returns a transparency report of what was matched vs. created.",
+    "Add a job application to CareerTrack. Resolves or creates company, job title, location, and source by name. Returns a transparency report of what was matched vs. created.",
     McpAddJobInputShape,
     async (rawInput) => {
       if (!auth.scopes.includes("jobs:write")) {

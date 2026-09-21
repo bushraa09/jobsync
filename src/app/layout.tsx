@@ -13,8 +13,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | JobSync",
-    default: "JobSync",
+    template: "%s | CareerTrack",
+    default: "CareerTrack",
   },
   description: "Job Application Tracking System",
 };

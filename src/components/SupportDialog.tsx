@@ -24,14 +24,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
         <DialogHeader>
           <DialogTitle>Support</DialogTitle>
           <DialogDescription>
-            <a
-              href="https://github.com/Gsync/jobsync/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              https://github.com/Gsync/jobsync/issues
-            </a>
+            CareerTrack — Job Search Assistant
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
@@ -42,16 +35,8 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps) {
           <div className="space-y-2">
             <h3 className="text-sm font-semibold">Copyright</h3>
             <p className="text-sm text-muted-foreground">
-              © {currentYear} JobSync. All rights reserved.
+              © {currentYear} CareerTrack. All rights reserved.
             </p>
-            <a
-              href="https://jobsync.ca/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-primary hover:underline"
-            >
-              https://jobsync.ca/
-            </a>
           </div>
         </div>
       </DialogContent>

@@ -203,7 +203,7 @@ function ActivitiesContainer() {
         {activitiesList.length < totalActivities && (
           <div ref={sentinelRef} className="flex justify-center p-4">
             {loadingMore && (
-              <Loader className="h-5 w-5 animate-spin text-blue-500" />
+              <Loader className="h-5 w-5 animate-spin text-primary" />
             )}
           </div>
         )}

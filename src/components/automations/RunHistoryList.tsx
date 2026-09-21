@@ -299,7 +299,7 @@ export function RunHistoryList({
               {loadingMore && (
                 <Loader2
                   data-testid="runs-load-more-spinner"
-                  className="h-5 w-5 animate-spin text-blue-500"
+                  className="h-5 w-5 animate-spin text-primary"
                 />
               )}
             </div>

@@ -512,7 +512,7 @@ export function DiscoveredJobsList({
                 {loadingMore && (
                   <Loader2
                     data-testid="jobs-load-more-spinner"
-                    className="h-5 w-5 animate-spin text-blue-500"
+                    className="h-5 w-5 animate-spin text-primary"
                   />
                 )}
               </div>

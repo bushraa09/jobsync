@@ -91,7 +91,7 @@ function TokenRevealDialog({
   const ocSnippet = JSON.stringify(
     {
       mcpServers: {
-        jobsync: {
+        careertrack: {
           type: "streamable-http",
           url: mcpUrl,
           headers: { Authorization: `Bearer ${token}` },
@@ -216,7 +216,7 @@ export default function McpAccessSettings() {
       <Card>
         <CardHeader>
           <CardTitle>MCP Endpoint</CardTitle>
-          <CardDescription>Connect AI agents to JobSync via the Model Context Protocol.</CardDescription>
+          <CardDescription>Connect AI agents to CareerTrack via the Model Context Protocol.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-1">
