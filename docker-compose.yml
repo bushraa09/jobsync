@@ -1,12 +1,17 @@
 services:
   app:
-    image: ghcr.io/gsync/jobsync:latest
-    container_name: jobsync_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: careertrack:latest
+    container_name: careertrack_app
     ports:
       - "3737:3737"
     environment:
       - NODE_ENV=production
       - MCP_ENABLED=${MCP_ENABLED:-true}
+      - SEED_DEMO=${SEED_DEMO:-false}
+      - NEXT_PUBLIC_DEMO_LOGIN=${NEXT_PUBLIC_DEMO_LOGIN:-true}
       - DATABASE_URL=file:/data/dev.db
       - AUTH_SECRET=${AUTH_SECRET:-your-auth-secret}
       - ENCRYPTION_KEY=${ENCRYPTION_KEY:-you-encryption-key-here}
@@ -25,7 +30,7 @@ services:
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:3737"]
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:3737/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3

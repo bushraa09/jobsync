@@ -17,7 +17,13 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { SigninFormSchema } from "@/models/signinForm.schema";
 import Loading from "../Loading";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Sparkles } from "lucide-react";
+
+// Demo credentials are shown as a one-click login unless explicitly disabled
+// (NEXT_PUBLIC_DEMO_LOGIN=false). They must match `npm run db:seed`.
+const DEMO_LOGIN_ENABLED = process.env.NEXT_PUBLIC_DEMO_LOGIN !== "false";
+const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_EMAIL ?? "demo@jobsync.dev";
+const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_PASSWORD ?? "demo1234";
 
 function SigninForm() {
   const [isPending, startTransition] = useTransition();
@@ -35,12 +41,12 @@ function SigninForm() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  const onSubmit = async (data: z.infer<typeof SigninFormSchema>) => {
+  const login = (email: string, password: string) => {
     startTransition(async () => {
       setError("");
       const formData = new FormData();
-      formData.set("email", data.email);
-      formData.set("password", data.password);
+      formData.set("email", email);
+      formData.set("password", password);
       const errorResponse = await authenticate("", formData);
       if (errorResponse) {
         setError(errorResponse);
@@ -48,6 +54,15 @@ function SigninForm() {
         router.push("/dashboard");
       }
     });
+  };
+
+  const onSubmit = async (data: z.infer<typeof SigninFormSchema>) =>
+    login(data.email, data.password);
+
+  const onDemoLogin = () => {
+    form.setValue("email", DEMO_EMAIL);
+    form.setValue("password", DEMO_PASSWORD);
+    login(DEMO_EMAIL, DEMO_PASSWORD);
   };
 
   return (
@@ -125,6 +140,33 @@ function SigninForm() {
             <Button type="submit" disabled={isPending} className="w-full">
               {isPending ? <Loading /> : "Login"}
             </Button>
+            {DEMO_LOGIN_ENABLED && (
+              <>
+                <div className="relative my-1">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">
+                      or
+                    </span>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isPending}
+                  onClick={onDemoLogin}
+                  className="w-full"
+                >
+                  <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Try the demo account
+                </Button>
+                <p className="text-center text-xs text-muted-foreground">
+                  Explore with sample data — {DEMO_EMAIL} / {DEMO_PASSWORD}
+                </p>
+              </>
+            )}
             <div
               className="flex h-8 items-end space-x-1"
               aria-live="polite"

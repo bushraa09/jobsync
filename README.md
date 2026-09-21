@@ -1,6 +1,18 @@
-# JobSync - Job Search Assistant
+# JobSync - AI-Powered Job Search Assistant
 
-## <a href="https://demo.jobsync.ca">Live Demo</a>
+![Next.js 15](https://img.shields.io/badge/Next.js-15-black?logo=next.js) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?logo=tailwindcss&logoColor=white) ![License: MIT](https://img.shields.io/badge/License-MIT-green)
+
+> **Portfolio fork** maintained by [Bushra](https://github.com/bushraa09) — based on the open-source [JobSync](https://github.com/Gsync/jobsync) project. This fork adds a one-click **demo account with realistic sample data**, deployment configs (Railway / Docker health checks) and UI polish.
+
+## Try the demo
+
+Click **"Try the demo account"** on the sign-in page, or log in with:
+
+| Email | Password |
+|---|---|
+| `demo@jobsync.dev` | `demo1234` |
+
+The demo account comes pre-loaded with a realistic job search in progress: 35 tracked applications across every status (offers, interviews, applied, rejected…), interviews with contacts, notes, tags, a complete resume with skills / experience / education / certifications, a cover letter, tasks, 45 days of activity history, an interview question bank, and a Greenhouse automation with run history and AI-matched discovered jobs.
 
 JobSync is a web app companion for managing your job search journey. This free and open-source project is designed to help job seekers efficiently track and organize their job applications. Say goodbye to the chaos of scattered information and hello to a streamlined, intuitive, and powerful job search experience running locally on your system.
 
@@ -44,17 +56,42 @@ JobSync Assistant is completely free to use and open source. It provides a power
 
 ## Quick Start
 
+### Run locally (development)
+
+```sh
+git clone https://github.com/bushraa09/jobsync.git
+cd jobsync
+npm install
+cp .env.example .env          # then set DATABASE_URL=file:./dev.db, AUTH_SECRET, ENCRYPTION_KEY
+npx prisma migrate deploy     # creates the SQLite database
+npm run db:seed               # (optional) demo account with sample data
+npm run dev
+```
+
+Open [http://localhost:3737](http://localhost:3737) and sign in with the demo account, or create your own.
+
+### Run with Docker
+
 Make sure [Docker](https://www.docker.com) is installed and running, then:
 
 ```sh
-git clone https://github.com/Gsync/jobsync.git
+git clone https://github.com/bushraa09/jobsync.git
 cd jobsync
-docker compose up
+SEED_DEMO=true docker compose up
 ```
 
-Open [http://localhost:3737](http://localhost:3737) and create your account. That's it!
+`SEED_DEMO=true` (re)creates the demo account on start-up; leave it unset for a clean instance.
 
 API keys for AI providers can be configured in **Settings** after signing in.
+
+### Demo data & the "Try the demo" button
+
+| Variable | Description |
+|---|---|
+| `npm run db:seed` | Creates (or resets) the demo account. Safe to re-run; other accounts are untouched. |
+| `SEED_DEMO=true` | Docker: run the seed automatically on container start. |
+| `NEXT_PUBLIC_DEMO_LOGIN=false` | Hide the **Try the demo account** button on the sign-in page. |
+| `DEMO_EMAIL` / `DEMO_PASSWORD` | Override the demo credentials for the seed (mirror them in `NEXT_PUBLIC_DEMO_EMAIL` / `NEXT_PUBLIC_DEMO_PASSWORD` so the button matches). |
 
 ### Configuration (Optional)
 
@@ -70,7 +107,7 @@ Environment variables can be set in `docker-compose.yml`:
 From the project directory, run the deploy script to pull the latest changes and rebuild:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/Gsync/jobsync/main/deploy.sh | sudo bash -s
+curl -fsSL https://raw.githubusercontent.com/bushraa09/jobsync/main/deploy.sh | sudo bash -s
 ```
 
 On **Windows**, run the PowerShell equivalent from the project directory instead (`deploy.sh` needs WSL or Git Bash; `deploy.ps1` runs natively):
@@ -176,6 +213,7 @@ We welcome contributions! Please read our [Contributing Guidelines](./CONTRIBUTI
 
 ### Credits
 
+- <a href="https://github.com/Gsync/jobsync">JobSync</a> — the original project this fork is built on
 - <a href="https://github.com/facebook/react">React</a>
 - <a href="https://github.com/vercel/next.js">Next</a>
 - <a href="https://github.com/shadcn-ui/ui">Shadcn</a>
