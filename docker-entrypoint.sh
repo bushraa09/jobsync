@@ -7,6 +7,12 @@ if [ -z "$AUTH_SECRET" ]; then
   echo "AUTH_SECRET was not set — generated a temporary secret for this container."
 fi
 
+# On Render, default the public URL to the one Render assigns.
+if [ -z "$NEXTAUTH_URL" ] && [ -n "$RENDER_EXTERNAL_URL" ]; then
+  export NEXTAUTH_URL="$RENDER_EXTERNAL_URL"
+  echo "NEXTAUTH_URL not set — using RENDER_EXTERNAL_URL ($NEXTAUTH_URL)."
+fi
+
 # Run migrations as root (before switching users)
 npx -y prisma@6.19.0 migrate deploy
 

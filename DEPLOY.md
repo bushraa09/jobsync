@@ -1,4 +1,52 @@
-# Deploying CareerTrack to Railway
+# Deploying CareerTrack
+
+- [Render (free tier, one-click Blueprint)](#deploying-to-render)
+- [Railway (persistent volume)](#deploying-to-railway)
+
+---
+
+## Deploying to Render
+
+The repo ships a [`render.yaml`](render.yaml) Blueprint, so the whole deploy is a
+few clicks. The Docker image runs migrations and seeds the demo account on boot.
+
+### 1. Create the Blueprint
+
+1. Push the repo to GitHub.
+2. Go to [dashboard.render.com](https://dashboard.render.com) → **New +** → **Blueprint**.
+3. Connect the GitHub repo. Render reads `render.yaml`, shows the `jobsync` web
+   service and the env vars it will create (`AUTH_SECRET` and `ENCRYPTION_KEY`
+   are auto-generated). Click **Apply**.
+4. Wait for the first build (~5–8 min for the Docker image). The service is
+   healthy when `/api/health` returns 200.
+
+### 2. Open the app
+
+Your URL is `https://jobsync-<hash>.onrender.com` (shown at the top of the
+service page). Sign in with **Try the demo account** (`demo@jobsync.dev` /
+`demo1234`).
+
+`NEXTAUTH_URL` is picked up automatically from Render's `RENDER_EXTERNAL_URL`.
+If you add a custom domain later, set `NEXTAUTH_URL` to it in
+**Environment** and redeploy.
+
+### Free-tier notes
+
+- **No persistent disk** — the SQLite file lives inside the container, so all
+  data resets on every deploy or restart. `SEED_DEMO=true` recreates the demo
+  account each boot, which is exactly what a portfolio needs. To keep real
+  user data, upgrade the service to **Starter** and uncomment the `disk` block
+  in `render.yaml` (mount path `/data`).
+- **Cold starts** — free services spin down after ~15 min idle; the first
+  request afterwards takes 30–60 s. Mention this on your portfolio, or use a
+  free uptime pinger against `/api/health`.
+- **Turn off the demo button** for a private instance with
+  `NEXT_PUBLIC_DEMO_LOGIN=false` (this is a build-time variable, so trigger a
+  redeploy after changing it) and remove `SEED_DEMO`.
+
+---
+
+## Deploying to Railway
 
 CareerTrack uses **SQLite** stored as a single file, so the only hard requirement
 of any host is a **persistent volume** mounted at `/data`. On Railway this takes
