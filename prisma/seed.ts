@@ -12,7 +12,7 @@
  * Login:  demo@jobsync.dev / demo1234
  * (override with DEMO_EMAIL / DEMO_PASSWORD / DEMO_NAME)
  */
-// Load .env when running locally; harmless if dotenv is absent (Docker image).
+// Load .env when running locally; harmless if dotenv is absent.
 try {
   require("dotenv").config();
 } catch {}

@@ -2,7 +2,7 @@
 
 ![Next.js 15](https://img.shields.io/badge/Next.js-15-black?logo=next.js) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?logo=tailwindcss&logoColor=white) ![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
-> **Portfolio fork** maintained by [Bushra](https://github.com/bushraa09) — based on the open-source [JobSync](https://github.com/Gsync/jobsync) project. This fork adds a one-click **demo account with realistic sample data**, deployment configs (Railway / Docker health checks) and UI polish.
+> **Portfolio fork** maintained by [Bushra](https://github.com/bushraa09) — based on the open-source [JobSync](https://github.com/Gsync/jobsync) project. This fork adds a one-click **demo account with realistic sample data**, one-click deploy configs for Render and Railway, and UI polish.
 
 ## Try the demo
 
@@ -51,7 +51,7 @@ Job searching can be overwhelming, with numerous applications to track and deadl
 
 
 ## Free to Use and Self-Hosted
-JobSync Assistant is completely free to use and open source. It provides a powerful job search management tool at no cost and ensures that everyone has access to the resources they need. Additionally, JobSeeker Assistant is designed to be self-hosted, giving you full control over your data. By using Docker, you can easily set up and run JobSync Assistant on your own server, ensuring a secure and personalized experience.
+JobSync Assistant is completely free to use and open source. It provides a powerful job search management tool at no cost and ensures that everyone has access to the resources they need. Additionally, JobSeeker Assistant is designed to be self-hosted, giving you full control over your data. It runs on plain Node.js with a single SQLite file, so you can set it up on your own machine or a free Render / Railway instance in minutes.
 
 
 ## Quick Start
@@ -70,17 +70,12 @@ npm run dev
 
 Open [http://localhost:3737](http://localhost:3737) and sign in with the demo account, or create your own.
 
-### Run with Docker
+### Deploy to Render / Railway
 
-Make sure [Docker](https://www.docker.com) is installed and running, then:
-
-```sh
-git clone https://github.com/bushraa09/jobsync.git
-cd jobsync
-SEED_DEMO=true docker compose up
-```
-
-`SEED_DEMO=true` (re)creates the demo account on start-up; leave it unset for a clean instance.
+Both platforms are pre-configured — see [DEPLOY.md](./DEPLOY.md). On Render it's
+**New → Blueprint → pick this repo → Apply**; the app builds with
+`npm run deploy:build` and starts with `npm run deploy:start`, which runs
+migrations and (with `SEED_DEMO=true`) seeds the demo account on every boot.
 
 API keys for AI providers can be configured in **Settings** after signing in.
 
@@ -89,34 +84,30 @@ API keys for AI providers can be configured in **Settings** after signing in.
 | Variable | Description |
 |---|---|
 | `npm run db:seed` | Creates (or resets) the demo account. Safe to re-run; other accounts are untouched. |
-| `SEED_DEMO=true` | Docker: run the seed automatically on container start. |
+| `SEED_DEMO=true` | Production: run the seed automatically on start (`npm run deploy:start`). |
 | `NEXT_PUBLIC_DEMO_LOGIN=false` | Hide the **Try the demo account** button on the sign-in page. |
 | `DEMO_EMAIL` / `DEMO_PASSWORD` | Override the demo credentials for the seed (mirror them in `NEXT_PUBLIC_DEMO_EMAIL` / `NEXT_PUBLIC_DEMO_PASSWORD` so the button matches). |
 
 ### Configuration (Optional)
 
-Environment variables can be set in `docker-compose.yml`:
+All variables are documented in [`.env.example`](./.env.example) (local) and
+[`.env.production.example`](./.env.production.example) (hosted).
 
 | Variable | Description |
 |---|---|
-| `TZ` | Your timezone (e.g. `America/Edmonton`). **Set this on remote servers** to avoid activity time shifts. |
-| `AUTH_SECRET` | Auto-generated if not set. To set manually: `openssl rand -base64 32` |
+| `TZ` | Your timezone (e.g. `Asia/Karachi`). **Set this on remote servers** to avoid activity time shifts. |
+| `AUTH_SECRET` | Auto-generated if not set (sessions then reset on restart). To set manually: `openssl rand -base64 32` |
+| `ENCRYPTION_KEY` | Encrypts stored AI API keys. Must stay stable: `openssl rand -base64 32` |
 
-### Updating
-
-From the project directory, run the deploy script to pull the latest changes and rebuild:
+### Updating a self-hosted instance
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/bushraa09/jobsync/main/deploy.sh | sudo bash -s
+git pull
+npm ci
+npx prisma migrate deploy
+npm run build
+npm start
 ```
-
-On **Windows**, run the PowerShell equivalent from the project directory instead (`deploy.sh` needs WSL or Git Bash; `deploy.ps1` runs natively):
-
-```powershell
-.\deploy.ps1
-```
-
->Note: If you are updating in a homelab environment, edit `NEXTAUTH_URL` in your `.env` file to use your server IP address instead of `localhost`. See `.env.example` for the expected format.
 
 ## Features in Detail
 

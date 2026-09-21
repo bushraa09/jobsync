@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 // Lightweight, unauthenticated health check for deployment platforms
-// (Railway, Docker, uptime monitors). Excluded from auth middleware.
+// (Render, Railway, uptime monitors). Excluded from auth middleware.
 export const dynamic = "force-dynamic";
 
 export function GET() {

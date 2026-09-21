@@ -1,29 +1,28 @@
 # Render Blueprint — https://render.com/docs/blueprint-spec
 # Deploy: Render dashboard → New → Blueprint → pick this repo.
 #
-# Free plan has no persistent disk, so the SQLite DB resets on every deploy /
-# restart. SEED_DEMO=true recreates the demo account on each boot, which is
-# fine for a portfolio. To keep real data, upgrade to Starter and uncomment
-# the `disk` block below.
+# Native Node runtime (no Docker). The free plan has no persistent disk, so the
+# SQLite DB resets on every deploy / restart; SEED_DEMO=true recreates the demo
+# account on each boot, which is fine for a portfolio. To keep real data,
+# upgrade to Starter, uncomment the `disk` block and set
+# DATABASE_URL=file:/var/data/dev.db.
 services:
   - type: web
     name: jobsync
-    runtime: docker
+    runtime: node
     plan: free
-    dockerfilePath: ./Dockerfile
+    buildCommand: npm run deploy:build
+    startCommand: npm run deploy:start
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: "3737"
+      - key: NODE_VERSION
+        value: "22"
       - key: DATABASE_URL
-        value: file:/data/dev.db
+        value: file:./dev.db
       - key: AUTH_TRUST_HOST
         value: "true"
-      # NEXTAUTH_URL is optional: the entrypoint falls back to Render's
-      # RENDER_EXTERNAL_URL. Set it only if you use a custom domain.
+      # NEXTAUTH_URL is optional: start.mjs falls back to RENDER_EXTERNAL_URL.
       - key: AUTH_SECRET
         generateValue: true
       - key: ENCRYPTION_KEY
@@ -34,5 +33,5 @@ services:
         value: Asia/Karachi
     # disk:
     #   name: jobsync-data
-    #   mountPath: /data
+    #   mountPath: /var/data
     #   sizeGB: 1
